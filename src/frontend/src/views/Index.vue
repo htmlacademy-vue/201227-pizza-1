@@ -83,13 +83,13 @@
 
                   <label
                     class="radio ingredients__input"
-                    v-for="item in pizza.sauces"
+                    v-for="item in valueSauces"
                     :key="item.id"
                   >
                     <input
+                      :value="item.value"
                       type="radio"
-                      name="sauce"
-                      :value="item.name"
+                      :name="item.name"
                       checked
                     />
                     <span>{{ item.name }}</span>
@@ -190,12 +190,24 @@ export default {
         2: "diameter__input--normal",
         3: "diameter__input--big",
       },
+      sauceMap: {
+        1: "tomato",
+        2: "creamy",
+      },
     };
   },
   computed: {
     valueDough() {
       return this.pizza.dough.map((item) => {
         return { ...item, value: item.name === "Толстое" ? "large" : "light" };
+      });
+    },
+    valueSauces() {
+      return this.pizza.sauces.map((item) => {
+        return {
+          ...item,
+          value: item.name === "Томатный" ? "tomato" : "creamy",
+        };
       });
     },
     valueIngredients() {
