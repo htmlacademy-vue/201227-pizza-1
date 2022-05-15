@@ -24,10 +24,8 @@
           <h1 class="title title--big">Конструктор пиццы</h1>
 
           <div class="content__dough">
-            <div class="sheet">
-              <h2 class="title title--small sheet__title">Выберите тесто</h2>
-
-              <div class="sheet__content dough">
+            <card title="Выберите тесто" type="dough">
+              <template v-slot:info>
                 <label
                   class="dough__input"
                   :class="doughMap[item.value]"
@@ -44,15 +42,13 @@
                   <b>{{ item.name }}</b>
                   <span>{{ item.description }}</span>
                 </label>
-              </div>
-            </div>
+              </template>
+            </card>
           </div>
 
           <div class="content__diameter">
-            <div class="sheet">
-              <h2 class="title title--small sheet__title">Выберите размер</h2>
-
-              <div class="sheet__content diameter">
+            <card title="Выберите размер" type="diameter">
+              <template v-slot:info>
                 <label
                   class="diameter__input"
                   :class="sizeMap[item.multiplier]"
@@ -67,33 +63,16 @@
                   />
                   <span>{{ item.name }}</span>
                 </label>
-              </div>
-            </div>
+              </template>
+            </card>
           </div>
 
           <div class="content__ingredients">
-            <div class="sheet">
-              <h2 class="title title--small sheet__title">
-                Выберите ингредиенты
-              </h2>
-
-              <div class="sheet__content ingredients">
+            <card title="Выберите ингредиенты" type="ingredients">
+              <template v-slot:info>
                 <div class="ingredients__sauce">
                   <p>Основной соус:</p>
-
-                  <label
-                    class="radio ingredients__input"
-                    v-for="item in valueSauces"
-                    :key="item.id"
-                  >
-                    <input
-                      :value="item.value"
-                      type="radio"
-                      :name="item.name"
-                      checked
-                    />
-                    <span>{{ item.name }}</span>
-                  </label>
+                  <radio-button :values="valueSauces" />
                 </div>
 
                 <div class="ingredients__filling">
@@ -134,8 +113,8 @@
                     </li>
                   </ul>
                 </div>
-              </div>
-            </div>
+              </template>
+            </card>
           </div>
 
           <div class="content__pizza">
@@ -173,9 +152,12 @@
 import misc from "../static/misc.json";
 import pizza from "../static/pizza.json";
 import user from "../static/user.json";
+import Card from "../common/components/Card";
+import RadioButton from "@/common/components/RadioButton";
 
 export default {
   name: "Index",
+  components: { Card, RadioButton },
   data() {
     return {
       misc,
