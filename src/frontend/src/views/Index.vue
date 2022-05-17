@@ -24,123 +24,21 @@
           <h1 class="title title--big">Конструктор пиццы</h1>
 
           <div class="content__dough">
-            <card title="Выберите тесто" type="dough">
-              <template v-slot:info>
-                <label
-                  class="dough__input"
-                  :class="doughMap[item.value]"
-                  v-for="item in valueDough"
-                  :key="item.id"
-                >
-                  <input
-                    type="radio"
-                    :name="item.name"
-                    :value="item.value"
-                    class="visually-hidden"
-                    checked
-                  />
-                  <b>{{ item.name }}</b>
-                  <span>{{ item.description }}</span>
-                </label>
-              </template>
-            </card>
+            <Builder-dough-selector />
           </div>
 
           <div class="content__diameter">
-            <card title="Выберите размер" type="diameter">
-              <template v-slot:info>
-                <label
-                  class="diameter__input"
-                  :class="sizeMap[item.multiplier]"
-                  v-for="item in pizza.sizes"
-                  :key="item.id"
-                >
-                  <input
-                    type="radio"
-                    name="diameter"
-                    :value="item.multiplier"
-                    class="visually-hidden"
-                  />
-                  <span>{{ item.name }}</span>
-                </label>
-              </template>
-            </card>
+            <Builder-size-selector />
           </div>
 
           <div class="content__ingredients">
-            <card title="Выберите ингредиенты" type="ingredients">
-              <template v-slot:info>
-                <div class="ingredients__sauce">
-                  <p>Основной соус:</p>
-                  <radio-button :values="valueSauces" />
-                </div>
-
-                <div class="ingredients__filling">
-                  <p>Начинка:</p>
-
-                  <ul class="ingredients__list">
-                    <li
-                      class="ingredients__item"
-                      v-for="item in valueIngredients"
-                      :key="item.id"
-                    >
-                      <span class="filling" :class="`filling--${item.value}`">{{
-                        item.name
-                      }}</span>
-                      <div class="counter counter--orange ingredients__counter">
-                        <button
-                          type="button"
-                          class="counter__button counter__button--minus"
-                          disabled
-                        >
-                          <span class="visually-hidden">Меньше</span>
-                        </button>
-                        <label>
-                          <input
-                            type="text"
-                            name="counter"
-                            class="counter__input"
-                            value="0"
-                          />
-                        </label>
-                        <button
-                          type="button"
-                          class="counter__button counter__button--plus"
-                        >
-                          <span class="visually-hidden">Больше</span>
-                        </button>
-                      </div>
-                    </li>
-                  </ul>
-                </div>
-              </template>
-            </card>
+            <Builder-ingredients-selector />
           </div>
 
           <div class="content__pizza">
-            <label class="input">
-              <span class="visually-hidden">Название пиццы</span>
-              <input
-                type="text"
-                name="pizza_name"
-                placeholder="Введите название пиццы"
-              />
-            </label>
+            <Builder-pizza-view />
 
-            <div class="content__constructor">
-              <div class="pizza pizza--foundation--big-tomato">
-                <div class="pizza__wrapper">
-                  <div class="pizza__filling pizza__filling--ananas"></div>
-                  <div class="pizza__filling pizza__filling--bacon"></div>
-                  <div class="pizza__filling pizza__filling--cheddar"></div>
-                </div>
-              </div>
-            </div>
-
-            <div class="content__result">
-              <p>Итого: 0 ₽</p>
-              <button type="button" class="button" disabled>Готовьте!</button>
-            </div>
+            <Builder-price-counter />
           </div>
         </div>
       </form>
@@ -152,52 +50,28 @@
 import misc from "../static/misc.json";
 import pizza from "../static/pizza.json";
 import user from "../static/user.json";
-import Card from "../common/components/Card";
-import RadioButton from "@/common/components/RadioButton";
+
+import BuilderPriceCounter from "@/modules/builder/BuilderPriceCounter";
+import BuilderPizzaView from "@/modules/builder/BuilderPizzaView";
+import BuilderSizeSelector from "@/modules/builder/BuilderSizeSelector";
+import BuilderIngredientsSelector from "@/modules/builder/BuilderIngredientsSelector";
+import BuilderDoughSelector from "@/modules/builder/BuilderDoughSelector";
 
 export default {
   name: "Index",
-  components: { Card, RadioButton },
+  components: {
+    BuilderPriceCounter,
+    BuilderPizzaView,
+    BuilderSizeSelector,
+    BuilderIngredientsSelector,
+    BuilderDoughSelector,
+  },
   data() {
     return {
       misc,
       pizza,
       user,
-      doughMap: {
-        light: "dough__input--light",
-        large: "dough__input--large",
-      },
-      sizeMap: {
-        1: "diameter__input--small",
-        2: "diameter__input--normal",
-        3: "diameter__input--big",
-      },
-      sauceMap: {
-        1: "tomato",
-        2: "creamy",
-      },
     };
-  },
-  computed: {
-    valueDough() {
-      return this.pizza.dough.map((item) => {
-        return { ...item, value: item.name === "Толстое" ? "large" : "light" };
-      });
-    },
-    valueSauces() {
-      return this.pizza.sauces.map((item) => {
-        return {
-          ...item,
-          value: item.name === "Томатный" ? "tomato" : "creamy",
-        };
-      });
-    },
-    valueIngredients() {
-      return this.pizza.ingredients.map((item) => {
-        const value = item.image.split("/")[4].slice(0, -4);
-        return { ...item, value: value };
-      });
-    },
   },
 };
 </script>
