@@ -11,7 +11,10 @@
           type="radio"
           name="diameter"
           :value="item.multiplier"
+          v-model="currentSize"
           class="visually-hidden"
+          :checked="currentSize"
+          @change="(evt) => $emit('change', evt.target.value)"
         />
         <span>{{ item.name }}</span>
       </label>
@@ -34,6 +37,7 @@ export default {
         2: "diameter__input--normal",
         3: "diameter__input--big",
       },
+      currentSize: 1,
     };
   },
 };

@@ -3,7 +3,10 @@
     <template v-slot:info>
       <div class="ingredients__sauce">
         <p>Основной соус:</p>
-        <radio-button :values="valueSauces" />
+        <radio-button
+          :values="valueSauces"
+          @input="(value) => $emit('input', value)"
+        />
       </div>
 
       <div class="ingredients__filling">
@@ -56,6 +59,7 @@ import pizza from "@/static/pizza.json";
 export default {
   name: "BuilderIngredientsSelector",
   components: { Card, RadioButton },
+  emits: ["input"],
   data() {
     return {
       pizza,
@@ -83,5 +87,3 @@ export default {
   },
 };
 </script>
-
-<style scoped></style>

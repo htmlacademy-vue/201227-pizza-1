@@ -11,8 +11,10 @@
           type="radio"
           :name="item.name"
           :value="item.value"
+          v-model="currentDough"
           class="visually-hidden"
-          checked
+          :checked="currentDough"
+          @change="(evt) => $emit('change', evt.target.value)"
         />
         <b>{{ item.name }}</b>
         <span>{{ item.description }}</span>
@@ -27,6 +29,7 @@ import pizza from "@/static/pizza.json";
 export default {
   name: "BuilderDoughSelector",
   components: { Card },
+  emits: ["change"],
   data() {
     return {
       pizza,
@@ -34,6 +37,7 @@ export default {
         light: "dough__input--light",
         large: "dough__input--large",
       },
+      currentDough: "light",
     };
   },
   computed: {

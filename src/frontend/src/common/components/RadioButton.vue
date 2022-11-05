@@ -5,7 +5,14 @@
       v-for="item in values"
       :key="item.id"
     >
-      <input :value="item.value" type="radio" :name="item.name" checked />
+      <input
+        :value="item.value"
+        v-model="currentSauce"
+        type="radio"
+        :name="item.name"
+        :checked="currentSauce"
+        @input="(evt) => $emit('input', evt.target.value)"
+      />
       <span>{{ item.name }}</span>
     </label>
   </div>
@@ -15,6 +22,12 @@
 export default {
   name: "RadioButton",
   props: { values: Array },
+  emits: ["input"],
+  data() {
+    return {
+      currentSauce: "creamy",
+    };
+  },
 };
 </script>
 

@@ -1,42 +1,29 @@
 <template>
   <div>
-    <header class="header">
-      <div class="header__logo">
-        <a href="index.html" class="logo">
-          <img
-            src="../assets/img/logo.svg"
-            alt="V!U!E! Pizza logo"
-            width="90"
-            height="40"
-          />
-        </a>
-      </div>
-      <div class="header__cart">
-        <a href="cart.html">0 ₽</a>
-      </div>
-      <div class="header__user">
-        <a href="#" class="header__login"><span>Войти</span></a>
-      </div>
-    </header>
+    <Header />
     <main class="content">
       <form action="#" method="post">
         <div class="content__wrapper">
           <h1 class="title title--big">Конструктор пиццы</h1>
 
           <div class="content__dough">
-            <Builder-dough-selector />
+            <Builder-dough-selector @change="changeDough" />
           </div>
 
           <div class="content__diameter">
-            <Builder-size-selector />
+            <Builder-size-selector @change="changeSize" />
           </div>
 
           <div class="content__ingredients">
-            <Builder-ingredients-selector />
+            <Builder-ingredients-selector @input="changeSauce" />
           </div>
 
           <div class="content__pizza">
-            <Builder-pizza-view />
+            <Builder-pizza-view
+              :dough="currentDough"
+              :sauce="currentSauce"
+              :size="currentSize"
+            />
 
             <Builder-price-counter />
           </div>
@@ -56,10 +43,12 @@ import BuilderPizzaView from "@/modules/builder/BuilderPizzaView";
 import BuilderSizeSelector from "@/modules/builder/BuilderSizeSelector";
 import BuilderIngredientsSelector from "@/modules/builder/BuilderIngredientsSelector";
 import BuilderDoughSelector from "@/modules/builder/BuilderDoughSelector";
+import Header from "@/layouts/AppLayout";
 
 export default {
   name: "Index",
   components: {
+    Header,
     BuilderPriceCounter,
     BuilderPizzaView,
     BuilderSizeSelector,
@@ -71,7 +60,21 @@ export default {
       misc,
       pizza,
       user,
+      currentDough: "light",
+      currentSauce: "creamy",
+      currentSize: 1,
     };
+  },
+  methods: {
+    changeDough(value) {
+      this.currentDough = value;
+    },
+    changeSauce(value) {
+      this.currentSauce = value;
+    },
+    changeSize(value) {
+      this.currentSize = value;
+    },
   },
 };
 </script>
