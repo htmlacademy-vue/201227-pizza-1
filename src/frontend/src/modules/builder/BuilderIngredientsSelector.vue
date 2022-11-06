@@ -26,6 +26,7 @@
                 type="button"
                 class="counter__button counter__button--minus"
                 disabled
+                @click="addIngredient(item)"
               >
                 <span class="visually-hidden">Меньше</span>
               </button>
@@ -40,6 +41,7 @@
               <button
                 type="button"
                 class="counter__button counter__button--plus"
+                @click="addIngredient(item)"
               >
                 <span class="visually-hidden">Больше</span>
               </button>
@@ -59,7 +61,7 @@ import pizza from "@/static/pizza.json";
 export default {
   name: "BuilderIngredientsSelector",
   components: { Card, RadioButton },
-  emits: ["input"],
+  emits: ["input", "change-ingredient"],
   data() {
     return {
       pizza,
@@ -67,6 +69,8 @@ export default {
         1: "tomato",
         2: "creamy",
       },
+      allIngredient: [],
+      allIngredienttest: {},
     };
   },
   computed: {
@@ -83,6 +87,20 @@ export default {
         const value = item.image.split("/")[4].slice(0, -4);
         return { ...item, value: value };
       });
+    },
+  },
+  methods: {
+    addIngredient(item) {
+      if (this.allIngredienttest[item.value]) {
+        if (this.allIngredienttest[item.value] < 3) {
+          this.allIngredienttest[item.value] =
+            this.allIngredienttest[item.value] + 1;
+        }
+      } else {
+        this.allIngredienttest[item.value] = 1;
+      }
+      console.log(1);
+      this.$emit("change-ingredient", this.allIngredienttest);
     },
   },
 };

@@ -15,14 +15,17 @@
           </div>
 
           <div class="content__ingredients">
-            <Builder-ingredients-selector @input="changeSauce" />
+            <Builder-ingredients-selector
+              @input="changeSauce"
+              @change-ingredient="changeIngredient"
+            />
           </div>
 
           <div class="content__pizza">
             <Builder-pizza-view
               :dough="currentDough"
               :sauce="currentSauce"
-              :size="currentSize"
+              :ingredients="currentIngredients"
             />
 
             <Builder-price-counter />
@@ -63,6 +66,7 @@ export default {
       currentDough: "light",
       currentSauce: "creamy",
       currentSize: 1,
+      currentIngredients: {},
     };
   },
   methods: {
@@ -74,6 +78,10 @@ export default {
     },
     changeSize(value) {
       this.currentSize = value;
+    },
+    changeIngredient(value) {
+      this.currentIngredients = value;
+      console.log(value);
     },
   },
 };

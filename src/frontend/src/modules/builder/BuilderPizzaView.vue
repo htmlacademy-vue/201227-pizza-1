@@ -11,6 +11,14 @@
     <div class="content__constructor">
       <div class="pizza" :class="pizzaFoundation">
         <div class="pizza__wrapper">
+          <div
+            v-for="(ingredient, key) in ingredients"
+            :key="key"
+            :class="[
+              { pizza__filling: Object.keys(ingredients).length !== 0 },
+              `pizza__filling--${key}`,
+            ]"
+          ></div>
           <!--          <div class="pizza__filling pizza__filling&#45;&#45;ananas"></div>-->
           <!--          <div class="pizza__filling pizza__filling&#45;&#45;bacon"></div>-->
           <!--          <div class="pizza__filling pizza__filling&#45;&#45;cheddar"></div>-->
@@ -29,6 +37,9 @@ export default {
     },
     sauce: {
       type: String,
+    },
+    ingredients: {
+      type: Object,
     },
   },
   computed: {
