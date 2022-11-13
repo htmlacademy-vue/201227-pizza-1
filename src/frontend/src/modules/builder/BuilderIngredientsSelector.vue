@@ -15,18 +15,18 @@
         <ul class="ingredients__list">
           <li
             class="ingredients__item"
-            v-for="item in valueIngredients"
+            v-for="item in ingredientsAll"
             :key="item.id"
           >
-            <span class="filling" :class="`filling--${item.value}`">{{
-              item.name
-            }}</span>
+            <span class="filling" :class="`filling--${item.value}`">
+              {{ item.name }}
+            </span>
             <div class="counter counter--orange ingredients__counter">
               <button
+                :disabled="item.count === 0"
                 type="button"
                 class="counter__button counter__button--minus"
-                disabled
-                @click="addIngredient(item)"
+                @click="delIngredient(item)"
               >
                 <span class="visually-hidden">Меньше</span>
               </button>
@@ -35,12 +35,14 @@
                   type="text"
                   name="counter"
                   class="counter__input"
-                  value="0"
+                  @input="changeIngredient"
+                  :value="item.count"
                 />
               </label>
               <button
                 type="button"
                 class="counter__button counter__button--plus"
+                :disabled="item.count >= 3"
                 @click="addIngredient(item)"
               >
                 <span class="visually-hidden">Больше</span>
@@ -69,8 +71,7 @@ export default {
         1: "tomato",
         2: "creamy",
       },
-      allIngredient: [],
-      allIngredienttest: {},
+      ingredientsAll: [],
     };
   },
   computed: {
@@ -82,25 +83,23 @@ export default {
         };
       });
     },
-    valueIngredients() {
-      return this.pizza.ingredients.map((item) => {
-        const value = item.image.split("/")[4].slice(0, -4);
-        return { ...item, value: value };
-      });
-    },
+  },
+  mounted() {
+    this.ingredientsAll = this.pizza.ingredients.map((item) => {
+      const value = item.image.split("/")[4].slice(0, -4);
+      return { ...item, value: value, count: 0 };
+    });
   },
   methods: {
     addIngredient(item) {
-      if (this.allIngredienttest[item.value]) {
-        if (this.allIngredienttest[item.value] < 3) {
-          this.allIngredienttest[item.value] =
-            this.allIngredienttest[item.value] + 1;
-        }
-      } else {
-        this.allIngredienttest[item.value] = 1;
-      }
+      item.count += 1;
+      this.$emit("change-ingredient", this.ingredientsAll);
+    },
+    delIngredient(item) {
+      item.count -= 1;
+    },
+    changeIngredient() {
       console.log(1);
-      this.$emit("change-ingredient", this.allIngredienttest);
     },
   },
 };

@@ -66,7 +66,7 @@ export default {
       currentDough: "light",
       currentSauce: "creamy",
       currentSize: 1,
-      currentIngredients: {},
+      currentIngredients: [],
     };
   },
   methods: {
@@ -81,7 +81,6 @@ export default {
     },
     changeIngredient(value) {
       this.currentIngredients = value;
-      console.log(value);
     },
   },
 };

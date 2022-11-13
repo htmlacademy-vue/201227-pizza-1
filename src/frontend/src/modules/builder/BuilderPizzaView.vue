@@ -11,17 +11,16 @@
     <div class="content__constructor">
       <div class="pizza" :class="pizzaFoundation">
         <div class="pizza__wrapper">
-          <div
-            v-for="(ingredient, key) in ingredients"
-            :key="key"
-            :class="[
-              { pizza__filling: Object.keys(ingredients).length !== 0 },
-              `pizza__filling--${key}`,
-            ]"
-          ></div>
-          <!--          <div class="pizza__filling pizza__filling&#45;&#45;ananas"></div>-->
-          <!--          <div class="pizza__filling pizza__filling&#45;&#45;bacon"></div>-->
-          <!--          <div class="pizza__filling pizza__filling&#45;&#45;cheddar"></div>-->
+          <template v-for="(ingredient, idx) in ingredients">
+            <div
+              :key="`${ingredient.value}-${idx}`"
+              v-if="ingredient.count"
+              class="pizza__filling"
+              :class="`pizza__filling--${ingredient.value} pizza__filling${
+                count[ingredient.count]
+              }`"
+            ></div>
+          </template>
         </div>
       </div>
     </div>
@@ -39,9 +38,19 @@ export default {
       type: String,
     },
     ingredients: {
-      type: Object,
+      type: Array,
     },
   },
+  data() {
+    return {
+      count: {
+        1: "",
+        2: "--second",
+        3: "--third",
+      },
+    };
+  },
+
   computed: {
     pizzaFoundation() {
       if (this.dough === "light" && this.sauce === "creamy") {
@@ -58,5 +67,3 @@ export default {
   },
 };
 </script>
-
-<style scoped></style>
