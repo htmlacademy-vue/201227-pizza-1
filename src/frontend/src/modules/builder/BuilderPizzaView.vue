@@ -3,12 +3,19 @@
     <label class="input">
       <span class="visually-hidden">Название пиццы</span>
       <input
+        v-model="pizzaName"
         type="text"
         name="pizza_name"
         placeholder="Введите название пиццы"
+        @change="$emit('change-name', pizzaName)"
       />
     </label>
-    <div class="content__constructor">
+    <div
+      class="content__constructor"
+      @drop="ingredientDrop"
+      @dragover.prevent
+      @dragenter.prevent
+    >
       <div class="pizza" :class="pizzaFoundation">
         <div class="pizza__wrapper">
           <template v-for="(ingredient, idx) in ingredients">
@@ -38,11 +45,14 @@ export default {
       type: String,
     },
     ingredients: {
-      type: Array,
+      type: Object,
+      default: () => ({}),
     },
   },
+  emits: ["change-name", "update-ingredients"],
   data() {
     return {
+      pizzaName: "",
       count: {
         1: "",
         2: "--second",
@@ -50,19 +60,17 @@ export default {
       },
     };
   },
-
   computed: {
     pizzaFoundation() {
-      if (this.dough === "light" && this.sauce === "creamy") {
-        return "pizza--foundation--small-creamy";
+      if (this.dough === "light") {
+        return `pizza--foundation--small-${this.sauce}`;
       }
-      if (this.dough === "light" && this.sauce === "tomato") {
-        return "pizza--foundation--small-tomato";
-      }
-      if (this.dough === "large" && this.sauce === "creamy") {
-        return "pizza--foundation--big-creamy";
-      }
-      return "pizza--foundation--big-tomato";
+      return `pizza--foundation--big-${this.sauce}`;
+    },
+  },
+  methods: {
+    ingredientDrop() {
+      this.$emit("update-ingredients");
     },
   },
 };

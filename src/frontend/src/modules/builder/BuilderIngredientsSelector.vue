@@ -15,10 +15,15 @@
         <ul class="ingredients__list">
           <li
             class="ingredients__item"
-            v-for="item in ingredientsAll"
-            :key="item.id"
+            v-for="item in ingredients"
+            :key="item.value"
           >
-            <span class="filling" :class="`filling--${item.value}`">
+            <span
+              class="filling"
+              :class="`filling--${item.value}`"
+              :draggable="true"
+              @dragstart="startDrag($event, item)"
+            >
               {{ item.name }}
             </span>
             <div class="counter counter--orange ingredients__counter">
@@ -35,7 +40,6 @@
                   type="text"
                   name="counter"
                   class="counter__input"
-                  @input="changeIngredient"
                   :value="item.count"
                 />
               </label>
@@ -64,6 +68,12 @@ export default {
   name: "BuilderIngredientsSelector",
   components: { Card, RadioButton },
   emits: ["input", "change-ingredient"],
+  props: {
+    ingredients: {
+      type: Object,
+      default: () => ({}),
+    },
+  },
   data() {
     return {
       pizza,
@@ -84,22 +94,31 @@ export default {
       });
     },
   },
-  mounted() {
-    this.ingredientsAll = this.pizza.ingredients.map((item) => {
-      const value = item.image.split("/")[4].slice(0, -4);
-      return { ...item, value: value, count: 0 };
-    });
-  },
   methods: {
+    startDrag(evt, item) {
+      evt.dataTransfer.dropEffect = "move";
+      evt.dataTransfer.effectAllowed = "move";
+      this.$emit("drag-ingredient", {
+        name: item.name,
+        count: item.count,
+        value: item.value,
+      });
+    },
     addIngredient(item) {
       item.count += 1;
-      this.$emit("change-ingredient", this.ingredientsAll);
+      this.$emit("change-ingredient", {
+        name: item.name,
+        count: item.count,
+        value: item.value,
+      });
     },
     delIngredient(item) {
       item.count -= 1;
-    },
-    changeIngredient() {
-      console.log(1);
+      this.$emit("change-ingredient", {
+        name: item.name,
+        count: item.count,
+        value: item.value,
+      });
     },
   },
 };

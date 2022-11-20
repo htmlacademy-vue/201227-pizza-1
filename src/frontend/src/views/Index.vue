@@ -16,8 +16,10 @@
 
           <div class="content__ingredients">
             <Builder-ingredients-selector
+              :ingredients="ingredients"
               @input="changeSauce"
               @change-ingredient="changeIngredient"
+              @drag-ingredient="dragIngredient"
             />
           </div>
 
@@ -25,7 +27,9 @@
             <Builder-pizza-view
               :dough="currentDough"
               :sauce="currentSauce"
-              :ingredients="currentIngredients"
+              :ingredients="ingredients"
+              @update-ingredients="updateIngredients"
+              @change-name="setName"
             />
 
             <Builder-price-counter />
@@ -66,7 +70,25 @@ export default {
       currentDough: "light",
       currentSauce: "creamy",
       currentSize: 1,
-      currentIngredients: [],
+      currentName: "",
+      drag: {},
+      ingredients: {
+        mushrooms: { value: "mushrooms", name: "Грибы", count: 0 },
+        cheddar: { value: "cheddar", name: "Чеддер", count: 0 },
+        salami: { value: "salami", name: "Салями", count: 0 },
+        ham: { value: "ham", name: "Ветчина", count: 0 },
+        ananas: { value: "ananas", name: "Ананас", count: 0 },
+        bacon: { value: "bacon", name: "Бекон", count: 0 },
+        onion: { value: "onion", name: "Лук", count: 0 },
+        chile: { value: "chile", name: "Чили", count: 0 },
+        jalapeno: { value: "jalapeno", name: "Халапеньо", count: 0 },
+        olives: { value: "olives", name: "Маслины", count: 0 },
+        tomatoes: { value: "tomatoes", name: "Томаты", count: 0 },
+        salmon: { value: "salmon", name: "Лосось", count: 0 },
+        mozzarella: { value: "mozzarella", name: "Моцарелла", count: 0 },
+        parmesan: { value: "parmesan", name: "Пармезан", count: 0 },
+        blue_cheese: { value: "blue_cheese", name: "Блю чиз", count: 0 },
+      },
     };
   },
   methods: {
@@ -79,11 +101,25 @@ export default {
     changeSize(value) {
       this.currentSize = value;
     },
-    changeIngredient(value) {
-      this.currentIngredients = value;
+    changeIngredient(item) {
+      if (item.count < 4) {
+        this.ingredients[item.value] = {
+          ...this.ingredients[item.value],
+          count: item.count,
+        };
+      }
+    },
+    updateIngredients() {
+      if (Object.keys(this.drag).length) {
+        this.changeIngredient({ ...this.drag, count: (this.drag.count += 1) });
+      }
+    },
+    dragIngredient(value) {
+      this.drag = value;
+    },
+    setName(value) {
+      this.currentName = value;
     },
   },
 };
 </script>
-
-<style scoped></style>
