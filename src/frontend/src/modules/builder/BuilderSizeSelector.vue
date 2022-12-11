@@ -11,9 +11,8 @@
           type="radio"
           name="diameter"
           :value="item.multiplier"
-          v-model="currentSize"
           class="visually-hidden"
-          :checked="currentSize"
+          :checked="item.multiplier === size"
           @change="(evt) => $emit('change', evt.target.value)"
         />
         <span>{{ item.name }}</span>
@@ -29,6 +28,9 @@ import pizza from "@/static/pizza.json";
 export default {
   name: "BuilderSizeSelector",
   components: { Card },
+  props: {
+    size: { type: Number, default: 1 },
+  },
   data() {
     return {
       pizza,
@@ -37,7 +39,6 @@ export default {
         2: "diameter__input--normal",
         3: "diameter__input--big",
       },
-      currentSize: 1,
     };
   },
 };

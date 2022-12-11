@@ -3,10 +3,14 @@
     <template v-slot:info>
       <div class="ingredients__sauce">
         <p>Основной соус:</p>
-        <radio-button
-          :values="valueSauces"
-          @input="(value) => $emit('input', value)"
-        />
+        <template v-for="item in valueSauces">
+          <radio-button
+            :item="item"
+            :checkItem="sauce"
+            :key="item.id"
+            @input="(value) => $emit('input', value)"
+          />
+        </template>
       </div>
 
       <div class="ingredients__filling">
@@ -67,20 +71,16 @@ import pizza from "@/static/pizza.json";
 export default {
   name: "BuilderIngredientsSelector",
   components: { Card, RadioButton },
-  emits: ["input", "change-ingredient"],
   props: {
     ingredients: {
       type: Object,
       default: () => ({}),
     },
+    sauce: { type: String },
   },
   data() {
     return {
       pizza,
-      sauceMap: {
-        1: "tomato",
-        2: "creamy",
-      },
       ingredientsAll: [],
     };
   },
@@ -98,27 +98,14 @@ export default {
     startDrag(evt, item) {
       evt.dataTransfer.dropEffect = "move";
       evt.dataTransfer.effectAllowed = "move";
-      this.$emit("drag-ingredient", {
-        name: item.name,
-        count: item.count,
-        value: item.value,
-      });
+      const dragItem = JSON.stringify(item);
+      evt.dataTransfer.setData("text/plain", dragItem);
     },
     addIngredient(item) {
-      item.count += 1;
-      this.$emit("change-ingredient", {
-        name: item.name,
-        count: item.count,
-        value: item.value,
-      });
+      this.$emit("add-ingredient", item);
     },
     delIngredient(item) {
-      item.count -= 1;
-      this.$emit("change-ingredient", {
-        name: item.name,
-        count: item.count,
-        value: item.value,
-      });
+      this.$emit("del-ingredient", item);
     },
   },
 };

@@ -7,19 +7,23 @@
           <h1 class="title title--big">Конструктор пиццы</h1>
 
           <div class="content__dough">
-            <Builder-dough-selector @change="changeDough" />
+            <Builder-dough-selector
+              :dough="currentDough"
+              @change="changeDough"
+            />
           </div>
 
           <div class="content__diameter">
-            <Builder-size-selector @change="changeSize" />
+            <Builder-size-selector :size="currentSize" @change="changeSize" />
           </div>
 
           <div class="content__ingredients">
             <Builder-ingredients-selector
               :ingredients="ingredients"
+              :sauce="currentSauce"
               @input="changeSauce"
-              @change-ingredient="changeIngredient"
-              @drag-ingredient="dragIngredient"
+              @add-ingredient="addIngredient"
+              @del-ingredient="delIngredient"
             />
           </div>
 
@@ -28,7 +32,7 @@
               :dough="currentDough"
               :sauce="currentSauce"
               :ingredients="ingredients"
-              @update-ingredients="updateIngredients"
+              @add-ingredient="addIngredient"
               @change-name="setName"
             />
 
@@ -67,31 +71,44 @@ export default {
       misc,
       pizza,
       user,
-      currentDough: "light",
+      currentDough: "",
       currentSauce: "creamy",
       currentSize: 1,
       currentName: "",
       drag: {},
-      ingredients: {
-        mushrooms: { value: "mushrooms", name: "Грибы", count: 0 },
-        cheddar: { value: "cheddar", name: "Чеддер", count: 0 },
-        salami: { value: "salami", name: "Салями", count: 0 },
-        ham: { value: "ham", name: "Ветчина", count: 0 },
-        ananas: { value: "ananas", name: "Ананас", count: 0 },
-        bacon: { value: "bacon", name: "Бекон", count: 0 },
-        onion: { value: "onion", name: "Лук", count: 0 },
-        chile: { value: "chile", name: "Чили", count: 0 },
-        jalapeno: { value: "jalapeno", name: "Халапеньо", count: 0 },
-        olives: { value: "olives", name: "Маслины", count: 0 },
-        tomatoes: { value: "tomatoes", name: "Томаты", count: 0 },
-        salmon: { value: "salmon", name: "Лосось", count: 0 },
-        mozzarella: { value: "mozzarella", name: "Моцарелла", count: 0 },
-        parmesan: { value: "parmesan", name: "Пармезан", count: 0 },
-        blue_cheese: { value: "blue_cheese", name: "Блю чиз", count: 0 },
-      },
+      ingredients: {},
     };
   },
+  computed: {
+    translatedSauces() {
+      return this.currentSauce === "Томатный" ? "tomato" : "creamy";
+    },
+  },
+  mounted() {
+    this.setIngredients();
+    this.setDoughs();
+  },
   methods: {
+    setIngredients() {
+      const pizzaIngredients = this.pizza.ingredients.map((item) => {
+        const value = item.image.split("/")[4].slice(0, -4);
+        return { ...item, value: value, count: 0 };
+      });
+
+      this.ingredients = pizzaIngredients.reduce((acc, item) => {
+        return {
+          ...acc,
+          [item.value]: item,
+        };
+      }, {});
+    },
+    setDoughs() {
+      const valueDoughs = this.pizza.dough;
+      this.currentDough = valueDoughs[0].image
+        .split("/")[3]
+        .slice(0, -4)
+        .split("-")[1];
+    },
     changeDough(value) {
       this.currentDough = value;
     },
@@ -99,23 +116,21 @@ export default {
       this.currentSauce = value;
     },
     changeSize(value) {
-      this.currentSize = value;
+      this.currentSize = Number(value);
     },
-    changeIngredient(item) {
-      if (item.count < 4) {
+    addIngredient(item) {
+      if (item.count < 3) {
         this.ingredients[item.value] = {
           ...this.ingredients[item.value],
-          count: item.count,
+          count: item.count + 1,
         };
       }
     },
-    updateIngredients() {
-      if (Object.keys(this.drag).length) {
-        this.changeIngredient({ ...this.drag, count: (this.drag.count += 1) });
-      }
-    },
-    dragIngredient(value) {
-      this.drag = value;
+    delIngredient(item) {
+      this.ingredients[item.value] = {
+        ...this.ingredients[item.value],
+        count: item.count - 1,
+      };
     },
     setName(value) {
       this.currentName = value;

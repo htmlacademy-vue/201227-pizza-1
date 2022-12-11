@@ -1,16 +1,11 @@
 <template>
   <div class="radio-wrap">
-    <label
-      class="radio ingredients__input"
-      v-for="item in values"
-      :key="item.id"
-    >
+    <label class="radio ingredients__input">
       <input
         :value="item.value"
-        v-model="currentSauce"
         type="radio"
         :name="item.name"
-        :checked="currentSauce"
+        :checked="item.value === checkItem"
         @input="(evt) => $emit('input', evt.target.value)"
       />
       <span>{{ item.name }}</span>
@@ -21,12 +16,9 @@
 <script>
 export default {
   name: "RadioButton",
-  props: { values: Array },
-  emits: ["input"],
-  data() {
-    return {
-      currentSauce: "creamy",
-    };
+  props: {
+    item: { type: Object, default: () => ({}) },
+    checkItem: { type: String },
   },
 };
 </script>

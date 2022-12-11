@@ -69,8 +69,9 @@ export default {
     },
   },
   methods: {
-    ingredientDrop() {
-      this.$emit("update-ingredients");
+    ingredientDrop(evt) {
+      const item = JSON.parse(evt.dataTransfer.getData("text/plain"));
+      this.$emit("add-ingredient", item);
     },
   },
 };
