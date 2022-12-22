@@ -1,7 +1,5 @@
 <template>
-  <div>
-    Вход
-  </div>
+  <div>Вход</div>
 </template>
 
 <script>

@@ -1,7 +1,5 @@
 <template>
-  <div>
-    Заказ
-  </div>
+  <div>Заказ</div>
 </template>
 
 <script>
