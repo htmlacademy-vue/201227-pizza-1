@@ -1,5 +1,5 @@
 <template>
-  <div>Заказ</div>
+  <div>Профиль</div>
 </template>
 
 <script>
