@@ -3,12 +3,17 @@ export default [
     path: "/",
     name: "Home",
     component: () => import("../views/Index.vue"),
-    children: [
-      {
-        path: "/login",
-        component: () => import("../views/Login.vue"),
-      },
-    ],
+    // children: [
+    //   {
+    //     path: "/login",
+    //   },
+    // ],
+    meta: { layout: "AppLayoutMain" },
+  },
+  {
+    path: "/login",
+    name: "Login",
+    component: () => import("../views/Login.vue"),
     meta: { layout: "AppLayoutMain" },
   },
   {

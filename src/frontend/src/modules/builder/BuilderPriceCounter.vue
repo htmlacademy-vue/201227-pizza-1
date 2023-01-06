@@ -1,6 +1,6 @@
 <template>
   <div class="content__result">
-    <p>Итого: 0 ₽</p>
+    <p>Итого: {{ conclusionSum }} ₽</p>
     <button type="button" class="button" :disabled="!isDisabledBtn">
       Готовьте!
     </button>
@@ -26,6 +26,17 @@ export default {
         .some((count) => count > 0);
 
       return this.name && hasIngredient;
+    },
+    conclusionSum() {
+      return Object.values(this.ingredients).reduce(
+        (accumulator, currentValue) => {
+          if (currentValue.count) {
+            return accumulator + currentValue.price * currentValue.count;
+          }
+          return accumulator;
+        },
+        0
+      );
     },
   },
 };
