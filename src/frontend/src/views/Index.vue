@@ -1,6 +1,5 @@
 <template>
   <div>
-    <Header />
     <main class="content">
       <form action="#" method="post">
         <div class="content__wrapper">
@@ -36,7 +35,10 @@
               @change-name="setName"
             />
 
-            <Builder-price-counter />
+            <Builder-price-counter
+              :name="currentName"
+              :ingredients="ingredients"
+            />
           </div>
         </div>
       </form>
@@ -54,12 +56,10 @@ import BuilderPizzaView from "@/modules/builder/BuilderPizzaView";
 import BuilderSizeSelector from "@/modules/builder/BuilderSizeSelector";
 import BuilderIngredientsSelector from "@/modules/builder/BuilderIngredientsSelector";
 import BuilderDoughSelector from "@/modules/builder/BuilderDoughSelector";
-import Header from "@/layouts/AppLayout";
 
 export default {
   name: "Index",
   components: {
-    Header,
     BuilderPriceCounter,
     BuilderPizzaView,
     BuilderSizeSelector,

@@ -20,12 +20,10 @@
         <div class="pizza__wrapper">
           <template v-for="(ingredient, idx) in ingredients">
             <div
-              :key="`${ingredient.value}-${idx}`"
-              v-if="ingredient.count"
+              v-for="item in ingredient.count"
+              :key="`${ingredient.value}-${idx}${item}`"
               class="pizza__filling"
-              :class="`pizza__filling--${ingredient.value} pizza__filling${
-                count[ingredient.count]
-              }`"
+              :class="`pizza__filling--${ingredient.value} pizza__filling${count[item]}`"
             ></div>
           </template>
         </div>
